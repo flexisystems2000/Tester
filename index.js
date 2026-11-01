@@ -1,37 +1,34 @@
-const makeWASocket = require('@musteqeem/baileys').default;
-const { useMultiFileAuthState, DisconnectReason, Browsers } = require('@musteqeem/baileys');
+const makeWASocket = require('@innovatorssoft/baileys').default;
+const { useMultiFileAuthState, DisconnectReason, Browsers } = require('@innovatorssoft/baileys');
 const pino = require('pino');
 
-// Set your target registration phone credentials
+// Target authentication routing properties
 const phoneNumber = "2347033855206"; 
 
-async function startBot() {
+async function startUnifiedBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_session');
 
     const sock = makeWASocket({
         auth: state,
         logger: pino({ level: 'silent' }),
         printQRInTerminal: false,
-        // Crucial browser identity parameter for successful pairing handshake
-        browser: Browsers.ubuntu('Chrome') 
+        browser: Browsers.ubuntu('Chrome') // Guarantees smooth pairing authentication handshake
     });
 
-    // Handle pairing logic if session doesn't exist yet
+    // Request Pairing Code sequence if session data is unauthenticated
     if (!sock.authState.creds.registered) {
         setTimeout(async () => {
             try {
                 let code = await sock.requestPairingCode(phoneNumber);
-                // Format the code visually into the standard XXXX-XXXX style
                 code = code?.match(/.{1,4}/g)?.join('-') || code;
                 console.clear();
                 console.log('\n==================================================');
-                console.log(`🔑 YOUR WHATSAPP PAIRING CODE: \x1b[32m${code}\x1b[0m`);
+                console.log(`🔑 YOUR NEW PAIRING CODE: \x1b[32m${code}\x1b[0m`);
                 console.log('==================================================\n');
-                console.log('Instructions:\n1. Open WhatsApp on your phone.\n2. Go to Settings > Linked Devices > Link a Device.\n3. Tap "Link with phone number instead" and input the code above.\n');
             } catch (err) {
-                console.error('Failed to generate pairing code:', err);
+                console.error('Pairing registration layer failed:', err.message);
             }
-        }, 3000); // 3-second delay to ensure socket registers connection layer first
+        }, 3000);
     }
 
     sock.ev.on('connection.update', (update) => {
@@ -39,14 +36,14 @@ async function startBot() {
 
         if (connection === 'close') {
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log('Connection dropped. Attempting reconnect:', shouldReconnect);
-            if (shouldReconnect) startBot();
+            console.log('Connection interrupted. Restoring socket stream:', shouldReconnect);
+            if (shouldReconnect) startUnifiedBot();
         } else if (connection === 'open') {
             console.clear();
-            console.log('==============================================');
-            console.log('✅ SUCCESS: Bot linked and active via pairing!');
-            console.log('Send ".test-table" in any chat to view output.');
-            console.log('==============================================');
+            console.log('==================================================');
+            console.log('✅ SUCCESS: Bot completely configured on innovatorssoft!');
+            console.log('Send ".test-table" inside any chat thread now.');
+            console.log('==================================================');
         }
     });
 
@@ -64,36 +61,34 @@ async function startBot() {
             if (!textContent) continue;
 
             if (textContent.trim().toLowerCase() === '.test-table') {
-                console.log(`Executing layout array transmission context to: ${jid}`);
+                console.log(`Sending native layout interface directly to target JID: ${jid}`);
 
                 try {
-                    // Directly injecting Meta AI structure payload formatting properties
-                    await sock.sendMessage(jid, { 
-                        richResponse: { 
-                            text: '*TikTok Stalk Profile Info*',
-                            table: {
-                                title: 'Ttstalk itsjustspykid',
-                                headers: ['Field', 'Value'],
-                                rows: [
-                                    ['Name', 'Spykid FF'],
-                                    ['Username', '@itsjustspykid'],
-                                    ['Bio', 'Drop a follow // - Di'],
-                                    ['Verified', 'No'],
-                                    ['Private', 'No'],
-                                    ['Followers', '70']
-                                ]
-                            }
-                        } 
-                    });
+                    // Custom protocol rendering execution made native via this package fork
+                    await sock.sendTable(
+                        jid, 
+                        'Ttstalk itsjustspykid', // The exact grey card subtitle block layout
+                        ['Field', 'Value'],      // Native table headers array
+                        [
+                            ['Name', 'Spykid FF'],
+                            ['Username', '@itsjustspykid'],
+                            ['Bio', 'Drop a follow // - Di'],
+                            ['Verified', 'No'],
+                            ['Private', 'No'],
+                            ['Followers', '70'],
+                            ['Following', '135'],
+                            ['Total likes', '3,962'],
+                            ['Videos', 'N/A'],
+                            ['Friends', '31'],
+                            ['Profile', 'https://tiktok.com']
+                        ]
+                    );
                 } catch (error) {
-                    console.error('Payload processing execution exception:', error.message);
-                    await sock.sendMessage(jid, { 
-                        text: "⚠️ Core structure dropped. Current package cannot resolve rich layout proto formatting hooks." 
-                    });
+                    console.error('UI rendering array fault:', error.message);
                 }
             }
         }
     });
 }
 
-startBot();
+startUnifiedBot();
