@@ -1,5 +1,5 @@
 const makeWASocket = require('@musteqeem/baileys').default;
-const { useMultiFileAuthState, DisconnectReason } = require('@musteqeem/baileys');
+const { useMultiFileAuthState, DisconnectReason, Browsers } = require('@musteqeem/baileys');
 const pino = require('pino');
 
 // Set your target registration phone credentials
@@ -11,7 +11,9 @@ async function startBot() {
     const sock = makeWASocket({
         auth: state,
         logger: pino({ level: 'silent' }),
-        printQRInTerminal: false // Disabled since we are explicitly requesting a pairing code
+        printQRInTerminal: false,
+        // Crucial browser identity parameter for successful pairing handshake
+        browser: Browsers.ubuntu('Chrome') 
     });
 
     // Handle pairing logic if session doesn't exist yet
