@@ -1,14 +1,14 @@
 {
-  "name": "baileys-table-test",
+  "name": "baileys-native-table-bot",
   "version": "1.0.0",
-  "description": "Testing raw table structures in @musteqeem/baileys via Pairing Code",
+  "description": "WhatsApp Bot with native table rendering using innovatorssoft",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@musteqeem/baileys": "latest",
+    "@innovatorssoft/baileys": "^6.6.0",
     "pino": "^9.0.0"
   }
 }
