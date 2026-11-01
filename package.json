@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@musteqeem/baileys": "^6.6.0",
+    "@musteqeem/baileys": "latest",
     "pino": "^9.0.0"
   }
 }
